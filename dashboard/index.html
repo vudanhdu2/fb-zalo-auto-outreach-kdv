@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FB + Zalo Auto-Outreach &amp; AI Responder Studio — Tùy Chỉnh Đa Mục Đích</title>
+  <link rel="stylesheet" href="../fonts/antigravity-fonts.css" />
+  <style>
+    :root {
+      --font-sans: 'Google Sans', 'Google Sans Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+      --font-mono: 'Google Sans Code', 'Google Sans', ui-monospace, SFMono-Regular, sans-serif;
+      --bg-primary: #0b0f19;
+      --bg-secondary: #111827;
+      --bg-card: #161f33;
+      --bg-card-hover: #1e2942;
+      --bg-subtle: rgba(255, 255, 255, 0.04);
+      --border-color: rgba(148, 163, 184, 0.16);
+      --text-primary: #f8fafc;
+      --text-secondary: #cbd5e1;
+      --text-muted: #94a3b8;
+      --accent-blue: #38bdf8;
+      --accent-emerald: #10b981;
+      --accent-indigo: #6366f1;
+      --accent-amber: #f59e0b;
+      --accent-rose: #f43f5e;
+      --accent-purple: #a855f7;
+      --sidebar-w: 285px;
+      --shadow-card: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+    }
+
+    [data-theme="light"] {
+      --bg-primary: #f1f5f9;
+      --bg-secondary: #ffffff;
+      --bg-card: #ffffff;
+      --bg-card-hover: #f8fafc;
+      --bg-subtle: rgba(15, 23, 42, 0.04);
+      --border-color: rgba(15, 23, 42, 0.12);
+      --text-primary: #0f172a;
+      --text-secondary: #334155;
+      --text-muted: #64748b;
+      --accent-blue: #0284c7;
+      --accent-emerald: #059669;
+      --accent-indigo: #4f46e5;
+      --accent-amber: #d97706;
+      --accent-rose: #e11d48;
+      --accent-purple: #7e22ce;
+      --shadow-card: 0 8px 24px -8px rgba(15, 23, 42, 0.08);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; scroll-behavior: smooth; }
+    html[data-scale="110"] { font-size: 17.6px; }
+    html[data-scale="120"] { font-size: 19.2px; }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.55;
+      display: flex;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .tabular-nums { font-variant-numeric: tabular-nums; }
+    code, pre { font-family: var(--font-mono); font-size: 0.84rem; }
+
+    /* LEFT SIDEBAR */
+    .sidebar {
+      width: var(--sidebar-w);
+      background: var(--bg-secondary);
+      border-right: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      z-index: 100;
+      transition: transform 0.25s ease;
+    }
+    .sidebar.collapsed { transform: translateX(-100%); }
+    .sidebar-header {
+      padding: 1.1rem 1.25rem;
+      border-bottom: 1px solid var(--border-color);
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+    .brand-logo {
+      width: 38px; height: 38px; border-radius: 10px;
+      background: linear-gradient(135deg, #3b82f6, #10b981);
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-weight: 700; font-size: 0.9rem;
+    }
+    .brand-title { font-size: 0.95rem; font-weight: 700; }
+    .brand-sub { font-size: 0.75rem; color: var(--text-muted); }
+
+    .sidebar-search {
+      padding: 0.8rem 1rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .search-input {
+      width: 100%; padding: 0.52rem 0.8rem; border-radius: 8px;
+      border: 1px solid var(--border-color); background: var(--bg-subtle);
+      color: var(--text-primary); font-family: var(--font-sans); font-size: 0.82rem;
+    }
+
+    .sidebar-nav { flex: 1; overflow-y: auto; padding: 0.75rem; }
+    .nav-group { margin-bottom: 1.2rem; }
+    .nav-group-title {
+      font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.05em; color: var(--text-muted); padding: 0.35rem 0.6rem;
+    }
+    .nav-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.55rem 0.7rem; border-radius: 8px;
+      color: var(--text-secondary); text-decoration: none;
+      font-size: 0.85rem; font-weight: 500; margin-bottom: 2px; cursor: pointer;
+    }
+    .nav-item:hover, .nav-item.active {
+      background: rgba(56, 189, 248, 0.12); color: var(--accent-blue);
+    }
+    .nav-badge {
+      font-size: 0.75rem; font-weight: 600; padding: 0.12rem 0.5rem;
+      border-radius: 999px; background: var(--bg-subtle);
+      border: 1px solid var(--border-color); font-variant-numeric: tabular-nums;
+    }
+
+    .sidebar-footer {
+      padding: 0.85rem 1rem; border-top: 1px solid var(--border-color);
+      display: flex; flex-direction: column; gap: 0.5rem;
+    }
+    .control-row { display: flex; gap: 0.4rem; }
+    .ctrl-btn {
+      flex: 1; padding: 0.4rem 0.5rem; border-radius: 6px;
+      border: 1px solid var(--border-color); background: var(--bg-subtle);
+      color: var(--text-secondary); font-family: var(--font-sans);
+      font-size: 0.75rem; font-weight: 600; cursor: pointer;
+    }
+    .ctrl-btn.active, .ctrl-btn:hover {
+      background: var(--accent-blue); color: #fff; border-color: var(--accent-blue);
+    }
+
+    /* MAIN */
+    .main-wrapper {
+      flex: 1; margin-left: var(--sidebar-w);
+      padding: 1.5rem 2rem 3rem;
+      max-width: calc(100vw - var(--sidebar-w));
+      transition: margin-left 0.25s ease, max-width 0.25s ease;
+    }
+    .main-wrapper.expanded { margin-left: 0; max-width: 100vw; }
+
+    .top-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 1rem; margin-bottom: 1.4rem; flex-wrap: wrap;
+    }
+    .btn {
+      padding: 0.52rem 0.95rem; border-radius: 8px;
+      border: 1px solid var(--border-color); background: var(--bg-card);
+      color: var(--text-primary); font-family: var(--font-sans);
+      font-size: 0.84rem; font-weight: 600; cursor: pointer;
+      display: inline-flex; align-items: center; gap: 0.4rem;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #fff; border-color: transparent;
+    }
+    .btn-blue {
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      color: #fff; border-color: transparent;
+    }
+    .btn-amber {
+      background: rgba(245, 158, 11, 0.16);
+      color: #fbbf24; border-color: rgba(245, 158, 11, 0.4);
+    }
+
+    .kpi-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(195px, 1fr));
+      gap: 1rem; margin-bottom: 1.5rem;
+    }
+    .kpi-card {
+      background: var(--bg-card); border: 1px solid var(--border-color);
+      border-radius: 14px; padding: 1.1rem 1.2rem; box-shadow: var(--shadow-card);
+    }
+    .kpi-label { font-size: 0.76rem; font-weight: 700; color: var(--text-muted); margin-bottom: 0.35rem; }
+    .kpi-value { font-size: 1.65rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+    .kpi-sub { font-size: 0.76rem; color: var(--text-secondary); margin-top: 0.25rem; }
+
+    .section-block {
+      background: var(--bg-card); border: 1px solid var(--border-color);
+      border-radius: 14px; padding: 1.35rem 1.5rem; margin-bottom: 1.5rem;
+      box-shadow: var(--shadow-card);
+    }
+    .section-header {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 1rem; margin-bottom: 1rem; padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border-color); flex-wrap: wrap;
+    }
+    .section-title { font-size: 1.08rem; font-weight: 700; }
+    .section-sub { font-size: 0.8rem; color: var(--text-muted); }
+
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 1.15rem; }
+    .form-group { margin-bottom: 0.9rem; }
+    .form-label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 0.35rem; }
+    .form-input, .form-textarea, .form-select {
+      width: 100%; padding: 0.6rem 0.8rem; border-radius: 8px;
+      border: 1px solid var(--border-color); background: var(--bg-primary);
+      color: var(--text-primary); font-family: var(--font-sans); font-size: 0.85rem;
+    }
+    .form-textarea { min-height: 92px; resize: vertical; line-height: 1.45; }
+
+    .preset-cards {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0.75rem; margin-bottom: 1.15rem;
+    }
+    .preset-card {
+      padding: 0.85rem 1rem; border-radius: 10px;
+      border: 1px solid var(--border-color); background: var(--bg-subtle);
+      cursor: pointer; transition: all 0.15s ease;
+    }
+    .preset-card:hover {
+      border-color: var(--accent-blue); background: rgba(56, 189, 248, 0.08);
+    }
+    .preset-name { font-size: 0.85rem; font-weight: 700; margin-bottom: 0.25rem; color: var(--accent-blue); }
+    .preset-desc { font-size: 0.76rem; color: var(--text-secondary); }
+
+    .preview-box {
+      padding: 1rem; border-radius: 10px;
+      border: 1px dashed var(--accent-emerald);
+      background: rgba(16, 185, 129, 0.06);
+      font-size: 0.85rem; margin-top: 0.85rem;
+    }
+
+    table { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
+    th, td { padding: 0.65rem 0.8rem; text-align: left; border-bottom: 1px solid var(--border-color); }
+    th { font-size: 0.76rem; text-transform: uppercase; color: var(--text-muted); background: var(--bg-subtle); }
+    .tag {
+      display: inline-block; padding: 0.16rem 0.55rem; border-radius: 6px;
+      font-size: 0.75rem; font-weight: 600; font-variant-numeric: tabular-nums;
+    }
+    .tag-emerald { background: rgba(16, 185, 129, 0.15); color: #34d399; }
+    .tag-blue { background: rgba(56, 189, 248, 0.15); color: #38bdf8; }
+    .tag-amber { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
+    .tag-rose { background: rgba(244, 63, 94, 0.15); color: #fb7185; }
+
+    @media (max-width: 960px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.mobile-open { transform: translateX(0); }
+      .main-wrapper { margin-left: 0; max-width: 100vw; padding: 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="brand-logo">AI</div>
+      <div>
+        <div class="brand-title">FB + Zalo Studio</div>
+        <div class="brand-sub">Tự động Nhắn tin Đa Mục Đích</div>
+      </div>
+    </div>
+
+    <div class="sidebar-search">
+      <input type="text" class="search-input" placeholder="Tìm khách hàng, SĐT, tin nhắn..." oninput="filterRows(this.value)" />
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-group">
+        <div class="nav-group-title">Điều hành &amp; Tùy chỉnh</div>
+        <a href="#studio" class="nav-item active">
+          <span>1. Xưởng Kịch bản Chiến dịch</span>
+          <span class="nav-badge">Tùy biến</span>
+        </a>
+        <a href="#contacts-sec" class="nav-item">
+          <span>2. Danh bạ Khách hàng</span>
+          <span class="nav-badge tabular-nums" id="navTotalContacts">0</span>
+        </a>
+        <a href="#logs-sec" class="nav-item">
+          <span>3. Nhật ký Chat FB &amp; Zalo</span>
+          <span class="nav-badge tabular-nums" id="navTotalLogs">0</span>
+        </a>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-title">4 Mẫu Chiến dịch có sẵn</div>
+        <div class="nav-item" onclick="applyPreset('preset_1_sales_b2b.json')">
+          <span>💼 Tư vấn Bán hàng B2B/B2C</span>
+        </div>
+        <div class="nav-item" onclick="applyPreset('preset_2_partner_kol.json')">
+          <span>🤝 Mời Đối tác / Đại lý / KOL</span>
+        </div>
+        <div class="nav-item" onclick="applyPreset('preset_3_customer_care.json')">
+          <span>💖 Chăm sóc KH &amp; Đặt lịch</span>
+        </div>
+        <div class="nav-item" onclick="applyPreset('preset_4_community_invite.json')">
+          <span>🌐 Mời Quản trị Cộng đồng</span>
+        </div>
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="control-row">
+        <button class="ctrl-btn active" id="btnDark" onclick="setTheme('dark')">🌙 Tối</button>
+        <button class="ctrl-btn" id="btnLight" onclick="setTheme('light')">☀️ Sáng</button>
+      </div>
+      <div class="control-row">
+        <button class="ctrl-btn active" id="scale100" onclick="setScale('100')">100%</button>
+        <button class="ctrl-btn" id="scale110" onclick="setScale('110')">110%</button>
+        <button class="ctrl-btn" id="scale120" onclick="setScale('120')">120%</button>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main-wrapper" id="mainWrapper">
+    <div class="top-bar">
+      <button class="btn" onclick="toggleSidebar()">☰ Menu</button>
+      <div style="display:flex; gap:0.6rem; flex-wrap:wrap;">
+        <button class="btn btn-amber" id="btnPauseOutreach" onclick="togglePauseOutreach()">⏸️ Chế độ Mời mới: Đang bật</button>
+        <button class="btn btn-blue" onclick="previewCampaign()">👁️ Xem thử Tin nhắn &amp; AI</button>
+        <button class="btn btn-primary" onclick="saveCampaign()">💾 Lưu Kịch bản Chiến dịch</button>
+      </div>
+    </div>
+
+    <!-- KPI -->
+    <div class="kpi-grid tabular-nums">
+      <div class="kpi-card">
+        <div class="kpi-label">TỔNG DANH BẠ</div>
+        <div class="kpi-value" id="kpiTotal" style="color:var(--accent-blue)">0</div>
+        <div class="kpi-sub" id="kpiQueued">Đang chờ gửi: 0</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">ĐÃ TIẾP CẬN (FB + ZALO)</div>
+        <div class="kpi-value" id="kpiContacted" style="color:var(--accent-indigo)">0</div>
+        <div class="kpi-sub">Đã gửi lời chào mở đầu</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">ĐANG TRAO ĐỔI (REPLIED)</div>
+        <div class="kpi-value" id="kpiReplied" style="color:var(--accent-amber)">0</div>
+        <div class="kpi-sub">Khách đang hỏi thông tin</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">ĐỒNG Ý / CHỐT MỤC TIÊU</div>
+        <div class="kpi-value" id="kpiAgreed" style="color:var(--accent-emerald)">0</div>
+        <div class="kpi-sub">Đạt mục tiêu chuyển đổi</div>
+      </div>
+    </div>
+
+    <!-- SECTION 1: CAMPAIGN STUDIO -->
+    <section class="section-block" id="studio">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">🎯 1. Xưởng Thiết kế Kịch bản Chiến dịch (Tùy chỉnh theo mọi mục đích riêng)</h2>
+          <div class="section-sub">Chọn nhanh 1 trong 4 mẫu có sẵn bên dưới hoặc tự định nghĩa mục tiêu, nhân vật, mẫu câu chào và kiến thức trả lời AI</div>
+        </div>
+      </div>
+
+      <div class="preset-cards">
+        <div class="preset-card" onclick="applyPreset('preset_1_sales_b2b.json')">
+          <div class="preset-name">💼 Mẫu 1: Tư vấn Bán hàng B2B/B2C</div>
+          <div class="preset-desc">Tiếp cận khách hàng tiềm năng, giải đáp bảng giá &amp; hẹn lịch demo/dùng thử.</div>
+        </div>
+        <div class="preset-card" onclick="applyPreset('preset_2_partner_kol.json')">
+          <div class="preset-name">🤝 Mẫu 2: Mời Đối tác / KOL / KOC</div>
+          <div class="preset-desc">Mời chủ shop, đại lý hoặc KOL trải nghiệm sản phẩm &amp; nhận chiết khấu đối tác.</div>
+        </div>
+        <div class="preset-card" onclick="applyPreset('preset_3_customer_care.json')">
+          <div class="preset-name">💖 Mẫu 3: CSKH &amp; Đặt lịch Dịch vụ</div>
+          <div class="preset-desc">Hỏi thăm khách hàng cũ sau mua, tặng ưu đãi và đặt lịch hẹn định kỳ.</div>
+        </div>
+        <div class="preset-card" onclick="applyPreset('preset_4_community_invite.json')">
+          <div class="preset-name">🌐 Mẫu 4: Mời Quản trị Cộng đồng</div>
+          <div class="preset-desc">Mời thành viên tích cực tham gia Ban quản trị / nhóm VIP.</div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div>
+          <div class="form-group">
+            <label class="form-label">Tên chiến dịch (`campaign_name`)</label>
+            <input type="text" id="cfgName" class="form-input" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Mục tiêu cốt lõi cần AI dẫn dắt (`campaign_goal`)</label>
+            <textarea id="cfgGoal" class="form-textarea"></textarea>
+          </div>
+          <div class="grid-2">
+            <div class="form-group">
+              <label class="form-label">Tên người gửi (`full_name`)</label>
+              <input type="text" id="cfgFullName" class="form-input" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Tên gọi ngắn (`short_name`)</label>
+              <input type="text" id="cfgShortName" class="form-input" />
+            </div>
+          </div>
+          <div class="grid-2">
+            <div class="form-group">
+              <label class="form-label">Thương hiệu / Tổ chức (`brand_or_org`)</label>
+              <input type="text" id="cfgBrand" class="form-input" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Số điện thoại Zalo (`zalo_phone`)</label>
+              <input type="text" id="cfgPhone" class="form-input tabular-nums" />
+            </div>
+          </div>
+          <div class="grid-2">
+            <div class="form-group">
+              <label class="form-label">Cặp đại từ mặc định</label>
+              <select id="cfgPronoun" class="form-select">
+                <option value="minh_ban">mình - bạn (Thân thiện, ngang hàng)</option>
+                <option value="em_anh_chi">em - anh/chị (Lịch sự, CSKH)</option>
+                <option value="anh_em">anh - em (Gần gũi)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Chiến lược điều phối kênh</label>
+              <select id="cfgRouting" class="form-select">
+                <option value="fb_and_zalo_smart">FB trước → Tự động cứu hộ qua Zalo nếu chặn tin</option>
+                <option value="zalo_only">Chỉ nhắn qua Zalo (Tìm SĐT &amp; Kết bạn)</option>
+                <option value="fb_only">Chỉ nhắn qua Facebook Messenger</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="form-group">
+            <label class="form-label">Các mẫu câu chào mở đầu (Mỗi dòng 1 mẫu; dùng biến `{name}`, `{short_name}`, `{brand_or_org}`, `{zalo_phone}`, `{context}`)</label>
+            <textarea id="cfgTemplates" class="form-textarea" style="min-height:125px;"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Hướng dẫn đóng vai cho AI (`system_instructions`)</label>
+            <textarea id="cfgSysPrompt" class="form-textarea" style="min-height:85px;"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Kiến thức trả lời câu hỏi thường gặp (`knowledge_base_faq` dạng JSON)</label>
+            <textarea id="cfgFaq" class="form-textarea" style="min-height:110px; font-family:var(--font-mono); font-size:0.78rem;"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div id="previewBox" class="preview-box" style="display:none;"></div>
+    </section>
+
+    <!-- SECTION 2: CONTACTS MANAGER -->
+    <section class="section-block" id="contacts-sec">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">👥 2. Quản lý Danh bạ Khách hàng / Đối tác (`contacts`)</h2>
+          <div class="section-sub">Thêm nhanh người nhận để hệ thống tự động nhắn tin qua Facebook Messenger hoặc tìm Zalo qua SĐT</div>
+        </div>
+      </div>
+
+      <div class="grid-2" style="margin-bottom:1rem;">
+        <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+          <input type="text" id="newName" class="form-input" placeholder="Tên khách hàng (VD: Trần Minh Tuấn)" style="flex:1;" />
+          <input type="text" id="newFbUid" class="form-input tabular-nums" placeholder="FB UID (nếu có)" style="width:155px;" />
+          <input type="text" id="newPhone" class="form-input tabular-nums" placeholder="SĐT Zalo (nếu có)" style="width:145px;" />
+        </div>
+        <div style="display:flex; gap:0.5rem;">
+          <input type="text" id="newContext" class="form-input" placeholder="Ngữ cảnh / Nhóm / Nhu cầu (VD: Phần mềm Quản lý Bán hàng)" style="flex:1;" />
+          <button class="btn btn-primary" onclick="addSingleContact()">➕ Thêm vào hàng đợi</button>
+        </div>
+      </div>
+
+      <div style="overflow-x:auto;">
+        <table class="tabular-nums">
+          <thead>
+            <tr>
+              <th>Tên khách hàng</th>
+              <th>FB UID / Zalo UID</th>
+              <th>SĐT</th>
+              <th>Ngữ cảnh (`context`)</th>
+              <th>Trạng thái</th>
+              <th>Kênh gần nhất</th>
+              <th>Phản hồi cuối</th>
+            </tr>
+          </thead>
+          <tbody id="contactsBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SECTION 3: INTERACTION LOGS -->
+    <section class="section-block" id="logs-sec">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">💬 3. Nhật ký Tương tác Thời gian thực (Facebook Messenger &amp; Zalo)</h2>
+          <div class="section-sub">Tự động cập nhật mỗi 3 giây toàn bộ tin nhắn gửi đi và câu trả lời của AI</div>
+        </div>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="tabular-nums">
+          <thead>
+            <tr>
+              <th>Thời gian</th>
+              <th>Kênh</th>
+              <th>Khách hàng</th>
+              <th>Tin nhắn của Khách</th>
+              <th>Phản hồi của Hệ thống</th>
+              <th>Phân loại</th>
+            </tr>
+          </thead>
+          <tbody id="logsBody"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    let currentFullConfig = null;
+    let isLoadedOnce = false;
+
+    function toggleSidebar() {
+      const sb = document.getElementById('sidebar');
+      const mw = document.getElementById('mainWrapper');
+      if (window.innerWidth <= 960) sb.classList.toggle('mobile-open');
+      else { sb.classList.toggle('collapsed'); mw.classList.toggle('expanded'); }
+    }
+    function setTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      document.getElementById('btnDark').classList.toggle('active', theme === 'dark');
+      document.getElementById('btnLight').classList.toggle('active', theme === 'light');
+    }
+    function setScale(scale) {
+      document.documentElement.setAttribute('data-scale', scale);
+      ['100', '110', '120'].forEach(s => document.getElementById('scale' + s).classList.toggle('active', s === scale));
+    }
+    function filterRows(q) {
+      const low = (q || '').toLowerCase().trim();
+      document.querySelectorAll('tbody tr').forEach(tr => {
+        tr.style.display = (!low || tr.innerText.toLowerCase().includes(low)) ? '' : 'none';
+      });
+    }
+
+    function populateStudioForm(cfg) {
+      if (!cfg) return;
+      currentFullConfig = cfg;
+      document.getElementById('cfgName').value = cfg.campaign_name || '';
+      document.getElementById('cfgGoal').value = cfg.campaign_goal || '';
+      const p = cfg.sender_persona || {};
+      document.getElementById('cfgFullName').value = p.full_name || '';
+      document.getElementById('cfgShortName').value = p.short_name || '';
+      document.getElementById('cfgBrand').value = p.brand_or_org || '';
+      document.getElementById('cfgPhone').value = p.zalo_phone || '';
+      document.getElementById('cfgPronoun').value = p.default_pronoun_pair || 'minh_ban';
+      const r = cfg.workflow_rules || {};
+      document.getElementById('cfgRouting').value = r.channel_routing || 'fb_and_zalo_smart';
+      document.getElementById('cfgTemplates').value = (cfg.outreach_templates || []).join('\n\n');
+      const b = cfg.ai_brain || {};
+      document.getElementById('cfgSysPrompt').value = b.system_instructions || '';
+      document.getElementById('cfgFaq').value = JSON.stringify(b.knowledge_base_faq || [], null, 2);
+    }
+
+    function collectStudioForm() {
+      const cfg = JSON.parse(JSON.stringify(currentFullConfig || {}));
+      cfg.campaign_name = document.getElementById('cfgName').value.trim();
+      cfg.campaign_goal = document.getElementById('cfgGoal').value.trim();
+      cfg.sender_persona = cfg.sender_persona || {};
+      cfg.sender_persona.full_name = document.getElementById('cfgFullName').value.trim();
+      cfg.sender_persona.short_name = document.getElementById('cfgShortName').value.trim();
+      cfg.sender_persona.brand_or_org = document.getElementById('cfgBrand').value.trim();
+      cfg.sender_persona.zalo_phone = document.getElementById('cfgPhone').value.trim();
+      cfg.sender_persona.default_pronoun_pair = document.getElementById('cfgPronoun').value;
+      cfg.workflow_rules = cfg.workflow_rules || {};
+      cfg.workflow_rules.channel_routing = document.getElementById('cfgRouting').value;
+      cfg.outreach_templates = document.getElementById('cfgTemplates').value
+        .split(/\n\s*\n/)
+        .map(s => s.trim())
+        .filter(Boolean);
+      cfg.ai_brain = cfg.ai_brain || {};
+      cfg.ai_brain.system_instructions = document.getElementById('cfgSysPrompt').value.trim();
+      try {
+        cfg.ai_brain.knowledge_base_faq = JSON.parse(document.getElementById('cfgFaq').value);
+      } catch (e) {}
+      return cfg;
+    }
+
+    async function saveCampaign() {
+      const cfg = collectStudioForm();
+      const res = await fetch('/api/campaign', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({config: cfg}),
+      });
+      const data = await res.json();
+      alert(data.message || 'Đã lưu kịch bản!');
+      fetchStatus();
+    }
+
+    async function applyPreset(presetFile) {
+      const res = await fetch('/api/campaign', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({preset_file: presetFile}),
+      });
+      const data = await res.json();
+      isLoadedOnce = false;
+      await fetchStatus();
+      await previewCampaign();
+    }
+
+    async function previewCampaign() {
+      const cfg = collectStudioForm();
+      const res = await fetch('/api/preview_message', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({config: cfg}),
+      });
+      const data = await res.json();
+      const box = document.getElementById('previewBox');
+      box.style.display = 'block';
+      box.innerHTML = `
+        <div style="margin-bottom:0.5rem;"><strong>📨 Xem thử Tin nhắn Mở đầu (Outreach):</strong><br/>${data.outreach_preview}</div>
+        <div><strong>🤖 Xem thử AI trả lời khi khách hỏi ("${data.sample_question}"):</strong><br/>${data.ai_reply_preview} <span class="tag tag-emerald">${data.intent}</span></div>
+      `;
+    }
+
+    async function addSingleContact() {
+      const name = document.getElementById('newName').value.trim();
+      const fb_uid = document.getElementById('newFbUid').value.trim();
+      const phone = document.getElementById('newPhone').value.trim();
+      const context_tag = document.getElementById('newContext').value.trim();
+      if (!name) { alert('Vui lòng nhập tên khách hàng!'); return; }
+      await fetch('/api/contacts', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({contacts: [{name, fb_uid, phone, context_tag, stage: 'QUEUED'}]}),
+      });
+      document.getElementById('newName').value = '';
+      document.getElementById('newFbUid').value = '';
+      document.getElementById('newPhone').value = '';
+      fetchStatus();
+    }
+
+    let currentPausedState = 'OFF';
+    async function togglePauseOutreach() {
+      const nextVal = currentPausedState === 'ON' ? 'OFF' : 'ON';
+      await fetch('/api/toggle', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({key: 'pause_new_outreach', value: nextVal}),
+      });
+      fetchStatus();
+    }
+
+    async function fetchStatus() {
+      try {
+        const res = await fetch('/api/status');
+        const data = await res.json();
+        if (!isLoadedOnce && data.full_campaign_config) {
+          populateStudioForm(data.full_campaign_config);
+          isLoadedOnce = true;
+        }
+        const sc = data.stage_counts || {};
+        document.getElementById('kpiTotal').innerText = data.total_contacts || 0;
+        document.getElementById('navTotalContacts').innerText = data.total_contacts || 0;
+        document.getElementById('kpiQueued').innerText = `Đang chờ gửi: ${sc.QUEUED || 0}`;
+        document.getElementById('kpiContacted').innerText = (sc.CONTACTED || 0) + (sc.REPLIED_ASKING || 0) + (sc.INTERESTED_AGREED || 0) + (sc.CONVERTED || 0);
+        document.getElementById('kpiReplied').innerText = sc.REPLIED_ASKING || 0;
+        document.getElementById('kpiAgreed').innerText = (sc.INTERESTED_AGREED || 0) + (sc.CONVERTED || 0);
+
+        currentPausedState = (data.engine_config && data.engine_config.pause_new_outreach) || 'OFF';
+        document.getElementById('btnPauseOutreach').innerText =
+          currentPausedState === 'ON' ? '⏸️ Gửi mời mới: ĐANG TẠM DỪNG' : '▶️ Gửi mời mới: ĐANG BẬT';
+
+        const cBody = document.getElementById('contactsBody');
+        cBody.innerHTML = (data.contacts || []).slice(0, 50).map(c => `
+          <tr>
+            <td><strong>${c.name || ''}</strong></td>
+            <td>FB: ${c.fb_uid || '—'}<br/>Zalo: ${c.zalo_uid || '—'}</td>
+            <td>${c.phone || '—'}</td>
+            <td>${c.context_tag || '—'}</td>
+            <td><span class="tag tag-blue">${c.stage || 'QUEUED'}</span></td>
+            <td>${c.last_channel || '—'}</td>
+            <td>${(c.last_user_msg || '').slice(-80)}</td>
+          </tr>
+        `).join('');
+
+        const logs = data.recent_logs || [];
+        document.getElementById('navTotalLogs').innerText = logs.length;
+        document.getElementById('logsBody').innerHTML = logs.slice(0, 40).map(l => `
+          <tr>
+            <td>${l.timestamp || ''}</td>
+            <td><span class="tag tag-emerald">${l.channel || ''}</span></td>
+            <td><strong>${l.contact_name || ''}</strong><br/><span style="font-size:0.75rem;color:var(--text-muted)">${l.context_tag || ''}</span></td>
+            <td>${l.user_msg || ''}</td>
+            <td>${l.ai_reply || ''}</td>
+            <td><span class="tag tag-amber">${l.intent || ''}</span></td>
+          </tr>
+        `).join('');
+      } catch (e) {}
+    }
+
+    fetchStatus();
+    setInterval(fetchStatus, 3500);
+  </script>
+</body>
+</html>

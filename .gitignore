@@ -1,0 +1,38 @@
+# Secrets & Environment
+.env
+.env.*
+!.env.example
+**/credentials.json
+**/cookies.json
+*.pem
+*.key
+
+# Databases & Runtime State
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+data/*.json
+!data/contacts_sample.json
+fast_engine_live_status.json
+auto_responder_log.json
+*.lock
+
+# Logs & Artifacts
+*.log
+logs/*
+!logs/.gitkeep
+artifacts/*
+!artifacts/.gitkeep
+mod_proofs/*
+chrome_profiles/
+
+# Dependencies & OS
+node_modules/
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.DS_Store
+Thumbs.db

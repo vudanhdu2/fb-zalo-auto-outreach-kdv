@@ -1,0 +1,13 @@
+{
+  "name": "fb-zalo-auto-outreach-kdv",
+  "version": "2.0.0",
+  "description": "Hệ thống tự động nhắn tin & tuyển Kiểm duyệt viên Group Facebook đa kênh (Facebook Messenger CDP + Zalo zca-js) kèm AI 6 Tầng Tự Tiến Hóa",
+  "type": "module",
+  "scripts": {
+    "zalo:login": "node scripts/2_login_zalo_qr.mjs",
+    "zalo:listener": "node zalo_bridge/zalo_listener.mjs"
+  },
+  "dependencies": {
+    "zca-js": "^2.1.2"
+  }
+}

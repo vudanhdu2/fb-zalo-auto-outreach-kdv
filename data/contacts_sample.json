@@ -1,0 +1,22 @@
+[
+  {
+    "contact_id": "lead_001",
+    "name": "Trần Minh Tuấn",
+    "fb_uid": "1000000000101",
+    "zalo_uid": "",
+    "phone": "0987654321",
+    "context_tag": "Giải pháp Tự động hóa Bán hàng & CSKH",
+    "custom_note_1": "Chủ chuỗi cửa hàng bán lẻ",
+    "stage": "QUEUED"
+  },
+  {
+    "contact_id": "lead_002",
+    "name": "Lê Thu Hà",
+    "fb_uid": "1000000000102",
+    "zalo_uid": "",
+    "phone": "0912345679",
+    "context_tag": "Đối tác Phân phối Mỹ phẩm Chính hãng",
+    "custom_note_1": "Quan tâm chính sách đại lý",
+    "stage": "QUEUED"
+  }
+]

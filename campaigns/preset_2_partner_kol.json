@@ -1,0 +1,31 @@
+{
+  "campaign_id": "preset_partner_kol",
+  "campaign_name": "Mẫu 2: Mời Hợp tác Đối tác / Đại lý / KOL / KOC",
+  "campaign_goal": "Mời các chủ shop, nhà sáng tạo nội dung (KOL/KOC) hoặc đại lý tiềm năng hợp tác phân phối sản phẩm với chính sách chiết khấu hấp dẫn.",
+  "sender_persona": {
+    "full_name": "Lê Hoàng Lan",
+    "short_name": "Lan",
+    "role_title": "Quản lý Phát triển Đối tác",
+    "brand_or_org": "Aura Brand",
+    "zalo_phone": "0912345678",
+    "default_pronoun_pair": "minh_ban",
+    "tone_style": "Cởi mở, tôn trọng đối tác, nêu rõ quyền lợi đôi bên cùng có lợi (Win-Win)."
+  },
+  "outreach_templates": [
+    "Chào {name}, {self_p} là {short_name} phụ trách đối tác bên {brand_or_org} (Zalo {zalo_phone}). Thấy kênh/cửa hàng của {user_p} trong mảng {context} rất chất lượng nên {self_p} muốn mời {user_p} hợp tác trải nghiệm và phân phối dòng sản phẩm mới với mức chiết khấu ưu đãi riêng. {User_p} xem nếu hứng thú thì nhắn lại {self_p} nhé."
+  ],
+  "zalo_friend_request_greeting": "Chào {name}, mình là {full_name} phụ trách đối tác {brand_or_org}, kết bạn Zalo với mình nhé",
+  "ai_brain": {
+    "system_instructions": "Đóng vai {full_name} mời {name} hợp tác làm Đối tác/KOC. Giải thích chính sách gửi mẫu thử miễn phí và hoa hồng/chiết khấu minh bạch.",
+    "knowledge_base_faq": [
+      {
+        "topic": "Chính sách chiết khấu & Mẫu thử",
+        "question_keywords": ["chiết khấu", "hoa hồng", "quyền lợi", "mẫu thử", "vốn"],
+        "answer_fact": "Bên mình gửi tặng bộ sản phẩm mẫu miễn phí tận nơi để bạn trải nghiệm trước, kèm mức chiết khấu đối tác từ 25-35% và không ép doanh số."
+      }
+    ],
+    "hard_guardrails": [
+      "Giữ đúng đại từ xưng hô, lịch sự và ngắn gọn."
+    ]
+  }
+}
